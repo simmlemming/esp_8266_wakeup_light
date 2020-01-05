@@ -14,7 +14,7 @@
 #define LED_PIN D8
 
 RTC_DS3231_DST rtc;
-Light light = Light();
+Light light = Light(rtc);
 Homenet net = Homenet(light.get_name());
 
 CRGB _leds[NUM_LEDS];
@@ -31,16 +31,17 @@ void setup() {
   FastLED.addLeds<LED_TYPE, LED_PIN, COLOR_ORDER>(_leds, NUM_LEDS).setCorrection(TypicalLEDStrip).setDither(0);
 
   net.setup(on_cmd);
-  
-//  rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+
+  //  rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
 
   FastLED.setBrightness(255);
   fill(CRGB::Green);
   FastLED.show();
-  
+
   delay(300);
 
-  light.set_brightness(0); // off
+  light.set_state(DEVICE_STATE_OFF);
+  light.set_target(100, 255, 0, 255, rtc.now().unixtime() + 10, 7);
 }
 
 void loop() {
@@ -58,10 +59,17 @@ void loop() {
 }
 
 void apply_state() {
-  CRGB color = CRGB(light.get_r(), light.get_g(), light.get_b());
-  
-  fill(color);
-  FastLED.setBrightness(light.get_brightness());
+  if (light.get_state() == DEVICE_STATE_OFF) {
+    fill(CRGB::Black);
+    FastLED.setBrightness(0);
+  }
+
+  if (light.get_state() == DEVICE_STATE_OK || light.get_state() == Light::DEVICE_STATE_WAKING_UP) {
+    CRGB color = CRGB(light.get_r(), light.get_g(), light.get_b());
+    fill(color);
+    int br = map(light.get_brightness(), 0, 100, 0, 255);
+    FastLED.setBrightness(br);
+  }
 
   FastLED.show();
 }
@@ -78,13 +86,22 @@ void on_cmd(Cmd cmd) {
     return;
   }
 
+  if (eq(cmd.cmd, CMD_ON)) {
+    light.set_state(DEVICE_STATE_OK);
+    return;
+  }
+
+  if (eq(cmd.cmd, CMD_OFF)) {
+    light.set_state(DEVICE_STATE_OFF);
+    return;
+  }
+
   if (eq(cmd.cmd, CMD_VALUE)) {
     light.set_brightness(cmd.br);
     light.set_rgb(cmd.r, cmd.g, cmd.b);
     return;
   }
 }
-
 
 boolean eq(const char* a1, const char* a2) {
   return strcmp(a1, a2) == 0;

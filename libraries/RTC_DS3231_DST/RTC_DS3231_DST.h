@@ -1,3 +1,5 @@
+#ifndef RTC_2
+#define RTC_2 "RTC"
 #include <RTClib.h>
 
 class RTC_DS3231_DST : public RTC_DS3231 {
@@ -13,3 +15,5 @@ class RTC_DS3231_DST : public RTC_DS3231 {
 
 bool operator>(const DateTime &left, const DateTime &right);
 void print(DateTime date);
+
+#endif
