@@ -6,6 +6,10 @@ Cmd Cmd::parse(JsonObject& json) {
     cmd.name = json["name"];
     cmd.cmd = json["cmd"];
     cmd.value = json["value"];
+    cmd.br = json["br"];
+    cmd.r = json["r"];
+    cmd.g = json["g"];
+    cmd.b = json["b"];
 
     return cmd;
 };

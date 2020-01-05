@@ -1,5 +1,6 @@
 #include "Device.h"
 
+
 Device::Device(char* name, char* room, char* type) {
     _name = name;
     _room = room;
@@ -33,23 +34,27 @@ long Device::get_wifi_strength() { return _wifi_strength; }
 int Device::get_wifi_state() { return _wifi_state; }
 
 void Device::set_wifi_state(int state) { 
-    _changed = _wifi_state != state;
+    _changed = _changed || (_wifi_state != state);
     _wifi_state = state;
 }
 
 void Device::set_state(int state) {
-    _changed = _state != state;
+    _changed = _changed || (_state != state);
     _state = state;
 }
 
 void Device::set_value(int value) {
-    _changed = value != value;
+    _changed = _changed || (_value != value);
     _value = value;
 }
 
 void Device::set_wifi_strength(long strength) {
     _changed = _changed || abs(_wifi_strength - strength) > 3;
     _wifi_strength = strength;
+}
+
+void Device::invalidate() {
+    _changed = true;
 }
 
 char* Device::to_json() {
@@ -64,6 +69,12 @@ char* Device::to_json() {
     root["value"] = get_value();
     root["state"] = get_state();
 
+    _add_state(root);
+
     root.printTo(jsonMessageBuffer, sizeof(jsonMessageBuffer));
     return jsonMessageBuffer;
+}
+
+void Device::_add_state(JsonObject& root) {
+
 }

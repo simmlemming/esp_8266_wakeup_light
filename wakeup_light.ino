@@ -38,10 +38,9 @@ void setup() {
   fill(CRGB::Green);
   FastLED.show();
   
-  delay(200);
+  delay(300);
 
-  light.set_brightness(255);
-  light.set_rgb(255, 0, 255);
+  light.set_brightness(0); // off
 }
 
 void loop() {
@@ -54,7 +53,7 @@ void loop() {
 
   if (state_changed) {
     apply_state();
-    net.send(light);
+    net.send(&light);
   }
 }
 
@@ -74,5 +73,19 @@ void fill(CRGB color) {
 }
 
 void on_cmd(Cmd cmd) {
-  
+  if (eq(cmd.cmd, CMD_STATE)) {
+    light.invalidate();
+    return;
+  }
+
+  if (eq(cmd.cmd, CMD_VALUE)) {
+    light.set_brightness(cmd.br);
+    light.set_rgb(cmd.r, cmd.g, cmd.b);
+    return;
+  }
+}
+
+
+boolean eq(const char* a1, const char* a2) {
+  return strcmp(a1, a2) == 0;
 }

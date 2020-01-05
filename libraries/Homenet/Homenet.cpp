@@ -62,8 +62,8 @@ void Homenet::loop() {
     _mqtt.loop();
 }
 
-void Homenet::send(Device device) {
-    char* json = device.to_json();
+void Homenet::send(Device* device) {
+    char* json = device -> to_json();
     _mqtt.publish(outTopic, json);
 
 #if DEBUG

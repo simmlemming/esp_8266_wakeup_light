@@ -17,7 +17,7 @@ class Homenet {
     void setup(void (*on_cmd)(Cmd cmd));
     void loop();
 
-    void send(Device s);
+    void send(Device* s);
     int get_state();
     long get_wifi_strength();
 

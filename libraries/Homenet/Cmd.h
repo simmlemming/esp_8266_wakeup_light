@@ -17,6 +17,10 @@ class Cmd {
     const char* name;
     const char* cmd;
     int value;
+    int r;
+    int g;
+    int b;
+    int br;
 };
 
 #endif

@@ -23,10 +23,12 @@ class Device {
 
    protected:
     bool _changed;
+    virtual void _add_state(JsonObject& root);
 
    public:
     Device(char* name, char* room, char* type);
     bool loop();
+    void invalidate();
 
     char* to_json();
 

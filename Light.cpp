@@ -1,5 +1,6 @@
 #include <Device.h>
 
+
 class Light : public Device {
 
   public:
@@ -11,7 +12,7 @@ class Light : public Device {
     }
 
     void set_brightness(int brightness) {
-      _changed = _brightness != brightness;
+      _changed = _changed || (_brightness != brightness);
       _brightness = brightness;
     }
 
@@ -34,7 +35,14 @@ class Light : public Device {
 
     _changed = true;
   }
-  
+
+  void _add_state(JsonObject& root) {
+    root["br"] = _brightness;
+    root["r"] = _rgb[0];
+    root["g"] = _rgb[1];
+    root["b"] = _rgb[2];
+  }
+
   private:
     int _brightness = 0;
     int _rgb[3];
