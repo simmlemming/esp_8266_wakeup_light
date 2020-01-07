@@ -32,16 +32,18 @@ void setup() {
 
   net.setup(on_cmd);
 
-  //  rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+//    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
 
   FastLED.setBrightness(255);
   fill(CRGB::Green);
   FastLED.show();
 
   delay(300);
-
-  light.set_state(DEVICE_STATE_OFF);
-  light.set_target(100, 255, 0, 255, rtc.now().unixtime() + 10, 7);
+  
+  light.set_brightness(100);
+  light.set_rgb(255, 0, 255);
+//  light.set_wakeup_time(rtc.now().unixtime() + 20, 15);
+  light.set_state(DEVICE_STATE_OK);
 }
 
 void loop() {
@@ -56,6 +58,9 @@ void loop() {
     apply_state();
     net.send(&light);
   }
+
+//  Serial.println(rtc.now().unixtime());
+//  delay(250);
 }
 
 void apply_state() {
@@ -97,8 +102,14 @@ void on_cmd(Cmd cmd) {
   }
 
   if (eq(cmd.cmd, CMD_VALUE)) {
+    light.set_state(DEVICE_STATE_OK);
     light.set_brightness(cmd.br);
     light.set_rgb(cmd.r, cmd.g, cmd.b);
+    return;
+  }
+
+  if (eq(cmd.cmd, CMD_WAKEUP)) {
+    light.set_wakeup_time(cmd.time_unix_s, cmd.delay_s);
     return;
   }
 }

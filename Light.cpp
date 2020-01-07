@@ -19,6 +19,14 @@ class Light : public Device {
       int br_pct = ((int)(n - (_target_time_ms - _target_delay_ms))) * 100 / (int)_target_delay_ms;
       br_pct = constrain(br_pct, 0, 100);
 
+//      Serial.print("target = ");
+//      Serial.println(_target_time_ms);
+//      Serial.print("state = ");
+//      Serial.println(get_state());
+//      Serial.print("br_pct = ");
+//      Serial.println(br_pct);
+//      Serial.println("   ");
+
       if (get_state() == DEVICE_STATE_OFF && br_pct > 0) {
         set_state(DEVICE_STATE_WAKING_UP);
       }
@@ -41,8 +49,9 @@ class Light : public Device {
     }
 
     void set_brightness(int brightness) {
-      _changed = _changed || (_brightness != brightness);
-      _brightness = brightness;
+      int new_br = constrain(brightness, 0, 100);
+      _changed = _changed || (_brightness != new_br);
+      _brightness = new_br;
     }
 
     int get_r() {
@@ -67,20 +76,31 @@ class Light : public Device {
       _rgb[2] = b;
     }
 
-    void set_target(int br, int r, int g, int b, uint32_t time_ms, uint32_t delay_ms) {
-      _target_br = br;
-      _target_rgb[0] = r;
-      _target_rgb[1] = g;
-      _target_rgb[2] = b;
+
+    void set_wakeup_time(uint32_t time_ms, uint32_t delay_ms) {
       _target_time_ms = time_ms;
       _target_delay_ms = delay_ms;
+      _target_rgb[0] = _rgb[0];
+      _target_rgb[1] = _rgb[1];
+      _target_rgb[2] = _rgb[2];
+      _target_br = _brightness;
+      _changed = true;
     }
 
     void _add_state(JsonObject& root) {
+      root["time"] = _rtc.now().unixtime();
       root["br"] = _brightness;
       root["r"] = _rgb[0];
       root["g"] = _rgb[1];
       root["b"] = _rgb[2];
+      root["wakeup_br"] = _target_br;
+      root["wakeup_r"] = _target_rgb[0];
+      root["wakeup_g"] = _target_rgb[1];
+      root["wakeup_b"] = _target_rgb[2];
+      root["wakeup_g"] = _target_rgb[1];
+      root["wakeup_b"] = _target_rgb[2];
+      root["wakeup_time_ms"] = _target_time_ms;
+      root["wakeup_delay_ms"] = _target_delay_ms;
     }
 
   private:

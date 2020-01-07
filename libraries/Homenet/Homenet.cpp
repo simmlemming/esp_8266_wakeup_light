@@ -38,7 +38,7 @@ void Homenet::_on_new_message(char* topic, uint8_t* payload, unsigned int length
     }
 
 #if DEBUG
-    char jsonMessageBuffer[1024];
+    char jsonMessageBuffer[2048];
     message.printTo(jsonMessageBuffer, sizeof(jsonMessageBuffer));
     Serial.print("<-- ");
     Serial.println(jsonMessageBuffer);

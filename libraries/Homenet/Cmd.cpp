@@ -10,6 +10,8 @@ Cmd Cmd::parse(JsonObject& json) {
     cmd.r = json["r"];
     cmd.g = json["g"];
     cmd.b = json["b"];
+    cmd.time_unix_s = json["time_unix_s"];
+    cmd.delay_s = json["delay_s"];
 
     return cmd;
 };

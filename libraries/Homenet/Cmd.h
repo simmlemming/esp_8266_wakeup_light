@@ -7,6 +7,7 @@
 #define CMD_RESET "reset"
 #define CMD_PAUSE "pause"
 #define CMD_VALUE "value"
+#define CMD_WAKEUP "wakeup"
 
 #include <ArduinoJson.h>
 
@@ -21,6 +22,8 @@ class Cmd {
     int g;
     int b;
     int br;
+    uint32_t time_unix_s;
+    uint32_t delay_s;
 };
 
 #endif
