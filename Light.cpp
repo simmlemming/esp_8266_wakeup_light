@@ -88,7 +88,7 @@ class Light : public Device {
     }
 
     void _add_state(JsonObject& root) {
-      root["time"] = _rtc.now().unixtime();
+      root["time_unix_s"] = _rtc.now().unixtime();
       root["br"] = _brightness;
       root["r"] = _rgb[0];
       root["g"] = _rgb[1];

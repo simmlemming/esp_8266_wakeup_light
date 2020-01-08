@@ -59,7 +59,7 @@ void Device::invalidate() {
 
 char* Device::to_json() {
     DynamicJsonBuffer jsonBuffer;
-    char jsonMessageBuffer[1024];
+    char jsonMessageBuffer[2048];
 
     JsonObject& root = jsonBuffer.createObject();
     root["name"] = get_name();
