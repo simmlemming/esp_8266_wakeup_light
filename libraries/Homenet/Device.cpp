@@ -15,7 +15,7 @@ bool Device::loop() {
 
 int Device::get_state() { return _state; }
 
-int Device::get_value() { return _value; }
+unsigned int Device::get_value() { return _value; }
 
 char* Device::get_name() {
     return _name;
@@ -43,7 +43,7 @@ void Device::set_state(int state) {
     _state = state;
 }
 
-void Device::set_value(int value) {
+void Device::set_value(unsigned int value) {
     _changed = _changed || (_value != value);
     _value = value;
 }
@@ -58,6 +58,8 @@ void Device::invalidate() {
 }
 
 char* Device::to_json() {
+    // Warning!
+    // Max length of JSON is 123 chars
     DynamicJsonBuffer jsonBuffer;
     char jsonMessageBuffer[2048];
 

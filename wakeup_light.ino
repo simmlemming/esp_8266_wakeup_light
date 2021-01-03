@@ -27,23 +27,22 @@ CRGB colors[] = {CRGB::White, CRGB::Red, CRGB::Yellow, CRGB::Green, CRGB::Purple
 void setup() {
   Serial.begin(115200);
   Wire.begin();
-
   FastLED.addLeds<LED_TYPE, LED_PIN, COLOR_ORDER>(_leds, NUM_LEDS).setCorrection(TypicalLEDStrip).setDither(0);
 
   net.setup(on_cmd);
 
-//    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+  //    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
 
   FastLED.setBrightness(255);
   fill(CRGB::Green);
   FastLED.show();
 
   delay(300);
-  
-  light.set_brightness(100);
-  light.set_rgb(255, 0, 255);
-//  light.set_wakeup_time(rtc.now().unixtime() + 20, 15);
-  light.set_state(DEVICE_STATE_OK);
+
+  light.set_brightness(255);
+  light.set_rgb(255, 255, 0);
+  light.set_wakeup_time(rtc.now().unixtime() + 17, 15);
+  light.set_state(DEVICE_STATE_OFF);
 }
 
 void loop() {
@@ -59,8 +58,8 @@ void loop() {
     net.send(&light);
   }
 
-//  Serial.println(rtc.now().unixtime());
-//  delay(250);
+  //  Serial.println(rtc.now().unixtime());
+  //  delay(250);
 }
 
 void apply_state() {
@@ -71,9 +70,8 @@ void apply_state() {
 
   if (light.get_state() == DEVICE_STATE_OK || light.get_state() == Light::DEVICE_STATE_WAKING_UP) {
     CRGB color = CRGB(light.get_r(), light.get_g(), light.get_b());
-    fill(color);
-    int br = map(light.get_brightness(), 0, 100, 0, 255);
-    FastLED.setBrightness(br);
+    fill(color);   
+    FastLED.setBrightness(light.get_brightness());
   }
 
   FastLED.show();
