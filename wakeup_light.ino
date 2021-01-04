@@ -31,7 +31,7 @@ void setup() {
 
   net.setup(on_cmd);
 
-  //    rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+//      rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
 
   FastLED.setBrightness(255);
   fill(CRGB::Green);
@@ -41,7 +41,8 @@ void setup() {
 
   light.set_brightness(255);
   light.set_rgb(255, 255, 0);
-  light.set_wakeup_time(rtc.now().unixtime() + 17, 15);
+  light.set_wakeup_time(rtc.now().unixtime() + 16, 15);
+//  light.set_wakeup_time(1609750800, 15 * 60); // 9:00, Jan 4
   light.set_state(DEVICE_STATE_OFF);
 }
 
@@ -58,8 +59,8 @@ void loop() {
     net.send(&light);
   }
 
-  //  Serial.println(rtc.now().unixtime());
-  //  delay(250);
+//    Serial.println(rtc.now().unixtime());
+//    delay(250);
 }
 
 void apply_state() {

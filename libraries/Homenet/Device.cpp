@@ -15,7 +15,7 @@ bool Device::loop() {
 
 int Device::get_state() { return _state; }
 
-unsigned int Device::get_value() { return _value; }
+uint32_t Device::get_value() { return _value; }
 
 char* Device::get_name() {
     return _name;
@@ -43,7 +43,7 @@ void Device::set_state(int state) {
     _state = state;
 }
 
-void Device::set_value(unsigned int value) {
+void Device::set_value(uint32_t value) {
     _changed = _changed || (_value != value);
     _value = value;
 }

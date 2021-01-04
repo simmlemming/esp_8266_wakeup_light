@@ -18,8 +18,8 @@ class Device {
     char* _type;
     long _wifi_strength;
     int _wifi_state;
-    unsigned int _state;
-    volatile int _value;
+    int _state;
+    volatile uint32_t _value;
 
    protected:
     bool _changed;
@@ -34,12 +34,12 @@ class Device {
 
     void set_wifi_strength(long strength);
     void set_state(int state);
-    void set_value(unsigned int value);
+    void set_value(uint32_t value);
     void set_wifi_state(int state);
 
     long get_wifi_strength();
     int get_state();
-    unsigned int get_value();
+    uint32_t get_value();
     char* get_name();
     char* get_room();
     char* get_type();
